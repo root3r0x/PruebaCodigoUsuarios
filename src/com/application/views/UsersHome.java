@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -18,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.application.controllers.UserController;
 import com.application.models.User;
+import javax.swing.ListSelectionModel;
+
 
 @SuppressWarnings("serial")
 public class UsersHome extends JFrame {
@@ -82,18 +85,26 @@ public class UsersHome extends JFrame {
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				int idUser = 0;
-				String userNombre = "";
-				String userApellidoPaterno = "";
-				String userApellidoMaterno = "";
-				String userCorreo = "";
-				String userContra = "";
-				
-				usersTable.getRowSelectionAllowed();
-				editUsers editar = new editUsers();
-				editar.setVisible(true);
-				editar.setAlwaysOnTop(true);
+				User usuario = new User();
+				int i = usersTable.getSelectedRow();
+				if(i>0)
+				{	
+					editUsers editar = new editUsers();
+					
+					usuario.setIdUsuario( (int) (usersTable.getValueAt(i, 0)));
+					usuario.setNombre(usersTable.getValueAt(i, 1).toString());
+					usuario.setApellidoPaterno((usersTable.getValueAt(i, 2).toString()));
+					usuario.setApellidoMaterno((usersTable.getValueAt(i, 3).toString()));
+					usuario.setCorreoUsuario((usersTable.getValueAt(i, 4).toString()));
+					usuario.setPasswordUsuario((usersTable.getValueAt(i, 5).toString()));
+					
+					editUsers.getUsuarioForm(usuario,(ArrayList<User>) listaUsuarios);
+					editar.setVisible(true);
+					editar.setAlwaysOnTop(true);
+					dispose();
+				}else {
+					JOptionPane.showMessageDialog(btnEditar, "Debe seleccionar un usuario a editar.");
+				}
 			}
 		});
 		btnEditar.setFont(new Font("SpaceMono NF", Font.BOLD, 15));
@@ -121,6 +132,8 @@ public class UsersHome extends JFrame {
 		contentPane.add(btnSalir);
 		
 		usersTable = new JTable();
+		usersTable.setDefaultEditor(Object.class, null);
+		usersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		usersTable.setColumnSelectionAllowed(true);
 		
 		try {
