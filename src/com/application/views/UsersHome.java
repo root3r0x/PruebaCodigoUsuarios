@@ -81,14 +81,17 @@ public class UsersHome extends JFrame {
 		btnAgregar.setFont(new Font("SpaceMono NF", Font.BOLD, 15));
 		btnAgregar.setBounds(784, 159, 178, 45);
 		contentPane.add(btnAgregar);
-		
+		 	
 		JButton btnEditar = new JButton("Editar");
+		
 		btnEditar.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
-				User usuario = new User();
+
 				int i = usersTable.getSelectedRow();
-				if(i>0)
+				if(i>-1)
 				{	
+					User usuario = new User();
 					editUsers editar = new editUsers();
 					
 					usuario.setIdUsuario( (int) (usersTable.getValueAt(i, 0)));
@@ -100,8 +103,8 @@ public class UsersHome extends JFrame {
 					
 					editUsers.getUsuarioForm(usuario,(ArrayList<User>) listaUsuarios);
 					editar.setVisible(true);
-					editar.setAlwaysOnTop(true);
-					dispose();
+					//editar.setAlwaysOnTop(true);
+					//dispose();
 				}else {
 					JOptionPane.showMessageDialog(btnEditar, "Debe seleccionar un usuario a editar.");
 				}

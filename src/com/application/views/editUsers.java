@@ -1,5 +1,7 @@
 package com.application.views;
 
+import static java.awt.Color.*;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,8 +27,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class editUsers extends JFrame {
 
@@ -64,8 +67,8 @@ public class editUsers extends JFrame {
 	
 	private static User usuarioEditar;
 	private static List<User> listaUsuarios = new ArrayList<User>();
-	private static JComboBox<Integer> cmbUsuarios = new JComboBox<Integer>();
-
+	
+	private static JComboBox<String> cmbUsuarios = new JComboBox<String>();
 	/**
 	 * Launch the application.
 	 */
@@ -81,27 +84,67 @@ public class editUsers extends JFrame {
 			}
 		});
 	}
+	
 	//Manejar por formulario.
 	public static void getUsuarioForm(User usuario, ArrayList<User> Usuarios) {
+		
+		listaUsuarios.clear();
+		
 		usuarioEditar = usuario;
-		listaUsuarios = Usuarios;
+		listaUsuarios = Usuarios;	
 		
-		System.out.println("Usuario de Home: " + usuario.getIdUsuario());
-		System.out.println("Usuario de Edit: " + usuarioEditar.getIdUsuario());
+		llenarCombo(usuarioEditar.getIdUsuario(), cmbUsuarios);
+		cmbUsuarios.setSelectedItem(usuarioEditar.getIdUsuario() + " " + usuarioEditar.getNombre());
 		
-		llenarCombo(cmbUsuarios);
-		cmbUsuarios.setSelectedItem(usuario.getIdUsuario());
+		
+		System.out.println(usuario.getIdUsuario() + usuario.getNombre());
+		
 		
 		txtNombreR.setText(usuarioEditar.getNombre());
 		txtAPaternoRegistrado.setText(usuarioEditar.getApellidoPaterno());
+		txtApellidoMRegistrado.setText(usuarioEditar.getApellidoMaterno());
+		txtCorreoRegistrado.setText(usuarioEditar.getCorreoUsuario());
+		txtContraRegistrada.setText(usuarioEditar.getPasswordUsuario());
+		
+		txtNuevoNombre.setText(usuarioEditar.getNombre());
+		txtApellidoPNuevo.setText(usuarioEditar.getApellidoPaterno());
+		txtApellidoMNuevo.setText(usuarioEditar.getApellidoMaterno());
+		txtCorreoNuevo.setText(usuarioEditar.getCorreoUsuario());
+		txtConfirmaCorreoNuevo.setText(usuarioEditar.getCorreoUsuario());
+		
+		//JPFContraNueva.setText(usuarioEditar.getPasswordUsuario());
+		//JPFConfirmaContraNueva.setText(usuarioEditar.getPasswordUsuario());
 	}
 	
-	public static void llenarCombo(JComboBox<Integer> cmbIDS) {
+	
+	public static void llenarCombo(int idUser, JComboBox<String> cmbIDS) {
 		for(User u: listaUsuarios) {
-				cmbIDS.addItem(u.getIdUsuario());
+			cmbIDS.addItem(u.getIdUsuario() + " " + u.getNombre());
 		}
 	}
 	
+	public static void validaTextos(String valor, String msg, JTextField txtValor) {
+		if(valor.isEmpty() || valor.isBlank()) {
+			valor = JOptionPane.showInputDialog(msg);
+			txtValor.setText(valor);
+		}
+	}
+	
+	public static void validaTextos(String valor, String Compara,String msg, JTextField txtValor, JTextField txtValorCompara, JLabel lblMensaje) {
+	
+		if(valor.isEmpty() || valor.isBlank()) {
+			valor = JOptionPane.showInputDialog("¡" + msg + " invalido! Ingrese un valor: ");
+			txtValor.setText(valor);
+			txtValorCompara.setText(valor);
+		}
+		
+		if(!valor.equals(Compara)) {
+			JOptionPane.showMessageDialog(txtValor, "El valor "+ msg + " no puede ser igual al ya registrado.");
+         lblMensaje.setForeground(RED);
+         lblMensaje.setText("Revisar el dato ingresado.");
+         txtValor.setFocusable(true);
+	   }
+   }
 	/**
 	 * Create the frame.
 	 */
@@ -159,14 +202,34 @@ public class editUsers extends JFrame {
 		txtConfirmaCorreoNuevo.setFont(new Font("SpaceMono NF", Font.BOLD, 13));
 		txtConfirmaCorreoNuevo.setColumns(10);
 		
-		//JComboBox<Integer> cmbUsuarios = new JComboBox<Integer>();
-		cmbUsuarios.setFont(new Font("SpaceMono Nerd Font", Font.BOLD, 13));
-		System.out.println("Ya paso el llenarCombo");//+ listaUsuarios.get(0).getIdUsuario());
-		/**
-		for(User u: listaUsuarios) {
-			System.out.println("userList:" + u.getIdUsuario());
-		}**/
+		cmbUsuarios.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				
+				Object item = cmbUsuarios.getSelectedItem();  
+				String itemString = item.toString();
+				
+				for(User u: listaUsuarios) {
+					
+					if(itemString.equals(u.getIdUsuario() + " "
+							+ u.getNombre())) {
+						txtNombreR.setText(u.getNombre());
+						txtAPaternoRegistrado.setText(u.getApellidoPaterno());
+						txtApellidoMRegistrado.setText(u.getApellidoMaterno());
+						txtCorreoRegistrado.setText(u.getCorreoUsuario());
+						txtContraRegistrada.setText(u.getPasswordUsuario());
+						  
+						txtNuevoNombre.setText(u.getNombre());
+						txtApellidoPNuevo.setText(u.getApellidoPaterno());
+						txtApellidoMNuevo.setText(u.getApellidoMaterno());
+						txtCorreoNuevo.setText(u.getCorreoUsuario());
+						txtConfirmaCorreoNuevo.setText(u.getCorreoUsuario());
+						}
+					}
+				System.gc();
+			}
+		});
 		
+		cmbUsuarios.setFont(new Font("SpaceMono Nerd Font", Font.BOLD, 13));
 		JLabel lblComboboxCodigoUsuaio = new JLabel("Seleccione c\u00F3digo de usuario.");
 		lblComboboxCodigoUsuaio.setFont(new Font("SpaceMono Nerd Font", Font.BOLD, 16));
 		
@@ -239,8 +302,33 @@ public class editUsers extends JFrame {
 		btnActualizar = new JButton("Actualizar");
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				llenarCombo(cmbUsuarios);
-				System.out.println("Boton Actualizar");
+				
+				int 	IDUsuario 		= cmbUsuarios.getSelectedIndex();
+				String 	nombre 			= txtNuevoNombre.getText();
+				String 	APaterno 		= txtApellidoPNuevo.getText();
+				String 	AMaterno 		= txtApellidoMNuevo.getText();
+				
+				String 	Email			= txtCorreoNuevo.getText();
+				String 	ConfirmaEmail 	= txtConfirmaCorreoNuevo.getText();
+				
+				String 	Contra 			= JPFContraNueva.getPassword().toString();
+				String 	ConfirmaContra 	= JPFConfirmaContraNueva.getPassword().toString();
+				
+				System.out.println("Boton Actualizar " + nombre);
+				
+				validaTextos(nombre,  "Nombre no valido, ingrese un nuevo valor: ",txtNuevoNombre);
+				validaTextos(APaterno,"A. Paterno no valido, ingrese nuevo valor: ", txtApellidoPNuevo);
+				validaTextos(AMaterno,"A. Materno no valido, ingrese nuevo valor: ", txtApellidoMNuevo);
+				
+				validaTextos(Email, "Email no valido, ingrese un nuevo valor: ", txtCorreoNuevo);
+				validaTextos(ConfirmaEmail, "Debe confirmar el email: ", txtConfirmaCorreoNuevo);
+				
+				//validaTextos(Contra, " Password no valido, ingrese un nuevo valor: ", JPFContraNueva);
+				//validaTextos(ConfirmaContra, JPFConfirmaContraNueva);
+				
+				//validaTextos(Contra, ConfirmaContra, JPFContraNueva, JPFConfirmaContraNueva);
+				//validaTextos(Contra, JPFContraNueva, ConfirmaContra, JPFConfirmaContraNueva);
+				
 			}
 		});
 		btnActualizar.setFont(new Font("SpaceMono Nerd Font Mono", Font.BOLD, 14));
@@ -296,14 +384,15 @@ public class editUsers extends JFrame {
 					.addGap(22))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(separator, GroupLayout.PREFERRED_SIZE, 655, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(cmbUsuarios, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+							.addComponent(separator, GroupLayout.PREFERRED_SIZE, 655, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap(12, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addComponent(cmbUsuarios, 0, 191, Short.MAX_VALUE)
 							.addGap(18)
-							.addComponent(lblComboboxCodigoUsuaio, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(29)))
-					.addContainerGap(12, Short.MAX_VALUE))
+							.addComponent(lblComboboxCodigoUsuaio, GroupLayout.PREFERRED_SIZE, 429, GroupLayout.PREFERRED_SIZE)
+							.addGap(29))))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 627, GroupLayout.PREFERRED_SIZE)
@@ -318,8 +407,8 @@ public class editUsers extends JFrame {
 					.addContainerGap(31, Short.MAX_VALUE))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(btnActualizar, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
 							.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE)
@@ -337,11 +426,11 @@ public class editUsers extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(7)
-							.addComponent(cmbUsuarios, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblComboboxCodigoUsuaio, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(lblComboboxCodigoUsuaio, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(7)
+							.addComponent(cmbUsuarios, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)))
 					.addGap(7)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
