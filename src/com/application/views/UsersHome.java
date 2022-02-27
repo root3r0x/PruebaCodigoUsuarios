@@ -87,7 +87,7 @@ public class UsersHome extends JFrame {
 		btnEditar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+				
 				int i = usersTable.getSelectedRow();
 				if(i>-1)
 				{	
@@ -95,6 +95,10 @@ public class UsersHome extends JFrame {
 					editUsers editar = new editUsers();
 					
 					usuario.setIdUsuario( (int) (usersTable.getValueAt(i, 0)));
+					
+					//1er print.
+					System.out.println("UsuarioID: " + usuario.getIdUsuario());
+					
 					usuario.setNombre(usersTable.getValueAt(i, 1).toString());
 					usuario.setApellidoPaterno((usersTable.getValueAt(i, 2).toString()));
 					usuario.setApellidoMaterno((usersTable.getValueAt(i, 3).toString()));
@@ -103,8 +107,8 @@ public class UsersHome extends JFrame {
 					
 					editUsers.getUsuarioForm(usuario,(ArrayList<User>) listaUsuarios);
 					editar.setVisible(true);
-					//editar.setAlwaysOnTop(true);
-					//dispose();
+					editar.setAlwaysOnTop(true);
+					dispose();
 				}else {
 					JOptionPane.showMessageDialog(btnEditar, "Debe seleccionar un usuario a editar.");
 				}

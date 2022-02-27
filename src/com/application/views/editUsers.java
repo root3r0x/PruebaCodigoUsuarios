@@ -93,8 +93,9 @@ public class editUsers extends JFrame {
 		usuarioEditar = usuario;
 		listaUsuarios = Usuarios;	
 		
-		llenarCombo(usuarioEditar.getIdUsuario(), cmbUsuarios);
+		llenarCombo(usuario.getIdUsuario(), cmbUsuarios);
 		cmbUsuarios.setSelectedItem(usuarioEditar.getIdUsuario() + " " + usuarioEditar.getNombre());
+		
 		
 		
 		System.out.println(usuario.getIdUsuario() + usuario.getNombre());
@@ -112,8 +113,6 @@ public class editUsers extends JFrame {
 		txtCorreoNuevo.setText(usuarioEditar.getCorreoUsuario());
 		txtConfirmaCorreoNuevo.setText(usuarioEditar.getCorreoUsuario());
 		
-		//JPFContraNueva.setText(usuarioEditar.getPasswordUsuario());
-		//JPFConfirmaContraNueva.setText(usuarioEditar.getPasswordUsuario());
 	}
 	
 	
@@ -210,8 +209,11 @@ public class editUsers extends JFrame {
 				
 				for(User u: listaUsuarios) {
 					
-					if(itemString.equals(u.getIdUsuario() + " "
-							+ u.getNombre())) {
+					if(itemString.equals(u.getIdUsuario() + " " + u.getNombre())) {
+						
+						//usuarioEditar.setIdUsuario(u.getIdUsuario());
+						//System.out.println("usuarioEditar= " + usuarioEditar.getIdUsuario());
+						
 						txtNombreR.setText(u.getNombre());
 						txtAPaternoRegistrado.setText(u.getApellidoPaterno());
 						txtApellidoMRegistrado.setText(u.getApellidoMaterno());
@@ -225,7 +227,7 @@ public class editUsers extends JFrame {
 						txtConfirmaCorreoNuevo.setText(u.getCorreoUsuario());
 						}
 					}
-				System.gc();
+				//System.gc();
 			}
 		});
 		
@@ -303,7 +305,7 @@ public class editUsers extends JFrame {
 		btnActualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int 	IDUsuario 		= cmbUsuarios.getSelectedIndex();
+				int 	IDUsuario 		= 0; //usuarioEditar.getIdUsuario();
 				String 	nombre 			= txtNuevoNombre.getText();
 				String 	APaterno 		= txtApellidoPNuevo.getText();
 				String 	AMaterno 		= txtApellidoMNuevo.getText();
@@ -314,14 +316,14 @@ public class editUsers extends JFrame {
 				String 	Contra 			= JPFContraNueva.getPassword().toString();
 				String 	ConfirmaContra 	= JPFConfirmaContraNueva.getPassword().toString();
 				
-				System.out.println("Boton Actualizar " + nombre);
+				//System.out.println("IDUSUARIO: " + IDUsuario + " Nombre: " + nombre);
 				
-				validaTextos(nombre,  "Nombre no valido, ingrese un nuevo valor: ",txtNuevoNombre);
-				validaTextos(APaterno,"A. Paterno no valido, ingrese nuevo valor: ", txtApellidoPNuevo);
-				validaTextos(AMaterno,"A. Materno no valido, ingrese nuevo valor: ", txtApellidoMNuevo);
+				//validaTextos(nombre,  "Nombre no valido, ingrese un nuevo valor: ",txtNuevoNombre);
+				//validaTextos(APaterno,"A. Paterno no valido, ingrese nuevo valor: ", txtApellidoPNuevo);
+				//validaTextos(AMaterno,"A. Materno no valido, ingrese nuevo valor: ", txtApellidoMNuevo);
 				
-				validaTextos(Email, "Email no valido, ingrese un nuevo valor: ", txtCorreoNuevo);
-				validaTextos(ConfirmaEmail, "Debe confirmar el email: ", txtConfirmaCorreoNuevo);
+				//validaTextos(Email, "Email no valido, ingrese un nuevo valor: ", txtCorreoNuevo);
+				//validaTextos(ConfirmaEmail, "Debe confirmar el email: ", txtConfirmaCorreoNuevo);
 				
 				//validaTextos(Contra, " Password no valido, ingrese un nuevo valor: ", JPFContraNueva);
 				//validaTextos(ConfirmaContra, JPFConfirmaContraNueva);
