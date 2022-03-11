@@ -1,4 +1,5 @@
-\bin\
+\bin\*
 \bin\com\application\connections
 *.class
+.project
 
